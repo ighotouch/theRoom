@@ -4,11 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "heroku-prebuild": "export NPM_CONFIG_PRODUCTION=false; export NODE_ENV=; NPM_CONFIG_PRODUCTION=false NODE_ENV=development npm install --only=dev --dev",
-    "heroku-postbuild": "export NPM_CONFIG_PRODUCTION=true; export NODE_ENV=production;",
     "dev": "cross-env NODE_ENV=production && nodemon src/server.ts",
     "start": "node ./build/src/server.js",
-    "build": "rimraf ./build && mkdirp build && tsc --project ./",
+    "build": "tsc --project ./",
     "migrate": "node_modules/.bin/sequelize db:migrate",
     "test": "cross-env NODE_ENV=test node_modules/.bin/jest --runInBand --detectOpenHandles --forceExit --collectCoverage"
   },
