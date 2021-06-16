@@ -1,0 +1,9 @@
+dependencies:
+  - name: mongodb
+    version: 10.10.1
+    repository: https://charts.bitnami.com/bitnami
+    condition: mongodb.enabled
+  - name: redis
+    version: 14.4.0
+    repository: https://charts.bitnami.com/bitnami
+    condition: mongodb.enabled
