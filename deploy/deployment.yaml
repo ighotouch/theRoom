@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-express
+  labels:
+    app: test-express
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-express
+  template:
+      metadata:
+        labels:
+          app: test-express
+      spec:
+        containers:
+        - name: test-express
+          image: ighotouch/test:1
+          ports:
+          - containerPort: 3000
+          env:
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: test-secret
+                key: test-root-username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: test-secret
+                key: test-root-password
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: test-secret
+                key: test-root-name
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: test-configmap
+                key: database_url
+          - name: JWT_SECRET
+            valueFrom:
+              configMapKeyRef:
+                name: test-configmap
+                key: jwt_secret
+          - name: DB_DIALECT
+            valueFrom:
+              configMapKeyRef:
+                name: test-configmap
+                key: db_dialect
+          - name: DB_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: test-configmap
+                key: db_port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-express-service
+spec:
+  selector:
+    app: test-express
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+      nodePort: 30001
+
+  
