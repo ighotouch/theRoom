@@ -30,12 +30,12 @@ class UserController {
 
   static async login(req: express.Request, res: any) {
     try {
-      const value = await loginRequestSchema.validateAsync(req.body);
-      const usr = await User.findOne({ where: { email: req.body.email } });
+      const data = new UserAuthDto({ ...req.body });
+      const usr = await User.findOne({ where: { email: data.email } });
 
       if (!usr) return res.status(404).send("No user found.");
 
-      if (!usr || !bcrypt.compareSync(req.body.password, usr.password)) {
+      if (!usr || !bcrypt.compareSync(data.password, usr.password)) {
         return res
           .status(401)
           .send({ auth: false, token: null, message: "Invalid Credentials" });
